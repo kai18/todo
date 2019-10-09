@@ -15,6 +15,7 @@ public class Task {
     private Integer taskId;
     private String text;
     private Boolean isComplete = Boolean.FALSE;
+    @JsonIgnore
     private Boolean isDeleted = Boolean.FALSE;
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.REMOVE)

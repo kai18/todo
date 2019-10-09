@@ -1,14 +1,17 @@
 package com.kaustubh.todo.service;
 
 import com.kaustubh.todo.exception.NoDataFoundException;
+import com.kaustubh.todo.model.Task;
 import com.kaustubh.todo.model.Todo;
 import com.kaustubh.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class TodoService {
@@ -25,9 +28,13 @@ public class TodoService {
     }
 
     public Todo getTodo(@NotNull Integer todoId) throws NoDataFoundException {
-        Optional<Todo> todo = todoRepository.findByIsDeletedFalseAndTodoId(todoId);
+        Optional<Todo> todo = todoRepository.findByIsDeletedAndTodoId(Boolean.FALSE, todoId);
         if (todo.isPresent()) {
-            return todo.get();
+            Todo todo1 = todo.get();
+            List<Task> tasks = todo1.getTasks();
+            tasks = tasks.stream().filter(task -> !task.getIsDeleted()).collect(Collectors.toList());
+            todo1.setTasks(tasks);
+            return todo1;
         } else {
             throw new NoDataFoundException("No Todo found with ID" + todoId);
         }

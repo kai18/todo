@@ -9,9 +9,8 @@ import java.util.Set;
 
 @Repository
 public interface TodoRepository extends CrudRepository<Todo, Integer> {
-    Optional<Set<Todo>> findAllByUserId(Integer userId);
 
-    Optional<Todo> findByIsDeletedFalseAndTodoId(Integer todoId);
+    Optional<Todo> findByIsDeletedAndTodoId(Boolean isDeleted, Integer todoId);
 
     Optional<Set<Todo>> findAllByUserIdAndIsDeletedFalse(Integer userId);
 

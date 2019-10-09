@@ -69,11 +69,12 @@ public class TodoController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Integer> deleteTodo(@PathVariable Integer todoId) {
+    @RequestMapping(path = "/{todoId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Integer> deleteTodo(@PathVariable Integer todoId) throws NoSuchResourceException {
         try {
             todoService.deleteTodo(todoId);
         } catch (NoDataFoundException e) {
-            new NoSuchResourceException(e.getMessage());
+            throw new NoSuchResourceException(e.getMessage());
         }
         return ResponseEntity.ok(todoId);
     }
