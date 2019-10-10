@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,8 +22,13 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
-    public Set<Todo> getTodoListForUser(@NotNull Integer userId) {
-        return todoRepository.findAllByUserIdAndIsDeletedFalse(userId).get();
+    public List<Todo> getTodoListForUser(@NotNull Integer userId) throws NoDataFoundException {
+        Optional<List<Todo>> todos = todoRepository.findAllByUserIdAndIsDeletedFalse(userId);
+        if (todos.isPresent()) {
+            return todos.get();
+        } else {
+            throw new NoDataFoundException("No Todo found for user with ID" + userId);
+        }
     }
 
     public Todo getTodo(@NotNull Integer todoId) throws NoDataFoundException {

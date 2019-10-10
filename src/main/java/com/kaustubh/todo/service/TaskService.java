@@ -23,7 +23,7 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Todo addTask(@NotNull Integer todoId, @NotNull Task task) {
+    public Todo addTask(@NotNull Integer todoId, @NotNull Task task) throws DuplicateKeyException {
         if (taskRepository.findByTextAndTodoTodoId(task.getText(), todoId) == null) {
             Todo todo = todoRepository.findById(todoId).get();
             todo.getTasks().add(task);
@@ -34,7 +34,7 @@ public class TaskService {
         }
     }
 
-    public Todo updateTask(@NotNull Integer todoId, @NotNull Task task) {
+    public Todo updateTask(@NotNull Integer todoId, @NotNull Task task) throws DuplicateKeyException {
         if (taskRepository.findById(task.getTaskId()) != null) {
             Todo todo = todoRepository.findById(todoId).get();
             task.setTodo(todo);
